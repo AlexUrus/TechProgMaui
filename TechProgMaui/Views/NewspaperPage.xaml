@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm ="clr-namespace:TechProgMaui.ViewModels"
+             x:Class="TechProgMaui.Views.NewspaperPage"
+             Title="Новостной агрегатор">
+
+    <ContentPage.BindingContext>
+        <vm:NewspaperViewModel/>
+    </ContentPage.BindingContext>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="15*"/>
+            <RowDefinition Height="1*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="15*"/>
+            <ColumnDefinition Width="1*"/>
+        </Grid.ColumnDefinitions>
+        <ScrollView Grid.Row="1" Grid.Column="1">
+            <VerticalStackLayout>
+                <ListView ItemsSource="{Binding NewsList}">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <ViewCell.View>
+                                    <Frame BackgroundColor="WhiteSmoke" HasShadow="True" Opacity="0.8" Margin="10">
+                                        <StackLayout>
+                                            <Label Text="{Binding Title}" FontAttributes="Bold"/>
+                                            <Label Text="{Binding Description}"/>
+                                            <Label Text="{Binding PublishedAt}"/>
+                                        </StackLayout>
+                                    </Frame>
+                                </ViewCell.View>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+                <Button Clicked="Button_Clicked"/>
+            </VerticalStackLayout>
+        </ScrollView>
+    </Grid>
+</ContentPage>

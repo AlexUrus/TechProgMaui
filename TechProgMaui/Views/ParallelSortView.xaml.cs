@@ -4,7 +4,7 @@ using TechProgMaui.ViewModels;
 
 namespace TechProgMaui.Views;
 
-public partial class ParallelSortView : ContentPage
+public partial class ParallelSortView : ContentPage, IObserver<List<SortResults>>
 {
 	private ParallelSortViewModel _viewModel;
 	public List<ChartEntry> CharEntries { get; set; }
@@ -12,12 +12,12 @@ public partial class ParallelSortView : ContentPage
 	public ParallelSortView()
 	{
 		InitializeComponent();
-		_viewModel = new ParallelSortViewModel();
-		_viewModel.GenerateTestCases();
-		CollectEntries();
+        CharEntries = new();
+        _viewModel = new();
+        _viewModel.Subscribe(this);
 	}
 
-	private void CollectEntries()
+	private void CollectEntries(List<SortResults> listSortResults)
 	{
 		CharEntries =
         [
@@ -29,9 +29,9 @@ public partial class ParallelSortView : ContentPage
             },
         ];
 
-		_viewModel.SortResultsList.OrderBy(x => x.NameSort);
+        listSortResults.OrderBy(x => x.NameSort);
 
-        foreach (var item in _viewModel.SortResultsList)
+        foreach (var item in listSortResults)
 		{
 			CharEntries.Add(new ChartEntry(item.TicksSorting)
 			{
@@ -47,4 +47,18 @@ public partial class ParallelSortView : ContentPage
 		};
     }
 
+    public void OnCompleted()
+    {
+        throw new NotImplementedException();
+    }
+
+    public void OnError(Exception error)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void OnNext(List<SortResults> listSortResults)
+    {
+        CollectEntries(listSortResults);
+    }
 }

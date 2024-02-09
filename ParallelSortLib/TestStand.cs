@@ -7,35 +7,44 @@ using System.Threading.Tasks;
 
 namespace ParallelSorting
 {
-    public static class TestStand
+    public class TestStand
     {
-        public static int[] GetRandomArray(int lenght, int maxValue, int minValue)
+        public async Task<int[]> GetRandomArrayAsync(int length, int maxValue, int minValue)
         {
-            return ArrayGenerator.Generate(lenght, maxValue, minValue);
+            return await Task.Run(() => ArrayGenerator.Generate(length, maxValue, minValue));
         }
 
-        public static long GetTicksMergeSort(int[] array)
+        public async Task<long> GetTicksMergeSortAsync(int[] array)
         {
-            Stopwatch sw = Stopwatch.StartNew();
-            MergeSort.Sort(array);
-            sw.Stop();
-            return sw.ElapsedTicks;
+            return await Task.Run(() =>
+            {
+                Stopwatch sw = Stopwatch.StartNew();
+                MergeSort.Sort(array);
+                sw.Stop();
+                return sw.ElapsedTicks;
+            });
         }
 
-        public static long GetTicksParallelMergeSort(int[] array)
+        public async Task<long> GetTicksParallelMergeSortAsync(int[] array)
         {
-            Stopwatch sw = Stopwatch.StartNew();
-            ParallelMergeSort.ParallelSort(array);
-            sw.Stop();
-            return sw.ElapsedTicks;
+            return await Task.Run(() =>
+            {
+                Stopwatch sw = Stopwatch.StartNew();
+                ParallelMergeSort.ParallelSort(array);
+                sw.Stop();
+                return sw.ElapsedTicks;
+            });
         }
 
-        public static long GetTicksWrongParallelMergeSort(int[] array)
+        public async Task<long> GetTicksWrongParallelMergeSortAsync(int[] array)
         {
-            Stopwatch sw = Stopwatch.StartNew();
-            WrongParallelMergeSort.Sort(array);
-            sw.Stop();
-            return sw.ElapsedTicks;
+            return await Task.Run(() =>
+            {
+                Stopwatch sw = Stopwatch.StartNew();
+                WrongParallelMergeSort.Sort(array);
+                sw.Stop();
+                return sw.ElapsedTicks;
+            });
         }
     }
 }

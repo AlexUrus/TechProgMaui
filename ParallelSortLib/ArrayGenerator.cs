@@ -15,7 +15,7 @@ namespace ParallelSorting
 
             for (int i = 0; i < lenght; i++)
             {
-                massive[i] = rnd.Next(maxValue, minValue);
+                massive[i] = rnd.Next(minValue, maxValue);
             }
             return massive;
         }

@@ -49,34 +49,34 @@ namespace ParallelSorting
             }
         }
 
-        public static int[] Sort(int[] array, int lowIndex, int highIndex)
+        public static void ParallelMergeSortInternal(int[] array, int left, int right, int depth)
         {
+            const int SequentialThreshold = 1000;
 
-            if (lowIndex < highIndex)
+            if (left < right)
             {
-                var middleIndex = (lowIndex + highIndex) / 2;
-                if (array.Length > 10000)
+                if (right - left < SequentialThreshold || depth <= 0)
                 {
-                    Parallel.Invoke(
-                                        () => Sort(array, lowIndex, middleIndex),
-                                        () => Sort(array, middleIndex + 1, highIndex)
-                                    );
+                    Array.Sort(array, left, right - left + 1);
                 }
                 else
                 {
-                    Sort(array, lowIndex, middleIndex);
-                    Sort(array, middleIndex + 1, highIndex);
+                    int mid = (left + right) / 2;
+
+                    Parallel.Invoke(
+                        () => ParallelMergeSortInternal(array, left, mid, depth - 1),
+                        () => ParallelMergeSortInternal(array, mid + 1, right, depth - 1)
+                    );
+
+                    Merge(array, left, mid, right);
                 }
-
-                Merge(array, lowIndex, middleIndex, highIndex);
             }
-
-            return array;
         }
 
-        public static int[] Sort(int[] array)
+        public static int[] ParallelSort(int[] array)
         {
-            return Sort(array, 0, array.Length - 1);
+            ParallelMergeSortInternal(array, 0, array.Length - 1, Environment.ProcessorCount);
+            return array;
         }
     }
 }

@@ -7,9 +7,16 @@
     Shell.FlyoutBehavior="Disabled"
     Title="TechProgMaui">
 
-    <ShellContent
-        Title="Newspaper"
-        ContentTemplate="{DataTemplate local:NewspaperPage}"
-        Route="MainPage" />
+    <TabBar>
+        <ShellContent
+            Title="ParallelSort"
+            ContentTemplate="{DataTemplate local:ParallelSortView}"
+            Route="MainPage" />
+
+        <ShellContent
+            Title="NewspaperPage"
+            ContentTemplate="{DataTemplate local:NewspaperPage}"
+            Route="OtherPage" />
+    </TabBar>
 
 </Shell>

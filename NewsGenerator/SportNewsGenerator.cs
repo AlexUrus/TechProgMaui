@@ -14,39 +14,30 @@ namespace NewsGenerator
 
         public override async void GenerateNews()
         {
+            string filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "SportsNews.json");
+
             using (HttpClient httpClient = new HttpClient())
             {
-                string apiKey = "e4fc91bf12f84a68bdfd6635855b5b13";
-                string apiUrl = $"https://newsapi.org/v2/top-headlines?country=ru&category={Category}&apiKey={apiKey}";
-
-                HttpResponseMessage response = await httpClient.GetAsync(apiUrl);
-
-                if (response.IsSuccessStatusCode)
+                try
                 {
-                    string newsJson = await response.Content.ReadAsStringAsync();
-                    JToken jToken = JToken.Parse(newsJson);
+                    HttpResponseMessage response = await httpClient.GetAsync(BuildApiUrl());
 
-                    foreach (var item in jToken["articles"])
+                    if (!response.IsSuccessStatusCode)
                     {
-                        var news = new TechNews
-                        {
-                            Title = item["title"]?.ToString(),
-                            Description = item["description"]?.ToString(),
-                            PublishedAt = DateTime.Parse(item["publishedAt"]?.ToString())
-                        };
-
-                        NewsList.Add(news);
+                        string newsJson = await response.Content.ReadAsStringAsync();
+                        SaveJsonToFile(newsJson, filePath);
+                        ParseAndNotify(newsJson);
                     }
-
-                    NotifyObservers(NewsList);
+                    else
+                    {
+                        TryLoadFromSavedFile(filePath);
+                    }
                 }
-                else
+                catch (Exception ex)
                 {
-                    throw new Exception($"Failed to fetch news. Status code: {response.StatusCode}");
+                    Console.WriteLine($"An error occurred: {ex.Message}");
                 }
             }
         }
-
-        
     }
 }

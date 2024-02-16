@@ -20,7 +20,7 @@ namespace NewsGenerator
                 {
                     HttpResponseMessage response = await httpClient.GetAsync(BuildApiUrl());
 
-                    if (!response.IsSuccessStatusCode)
+                    if (response.IsSuccessStatusCode)
                     {
                         string newsJson = await response.Content.ReadAsStringAsync();
                         SaveJsonToFile(newsJson, filePath);

@@ -20,81 +20,42 @@ namespace TechProgMaui.ViewModels
 
         public async void GenerateTestCases()
         {
+            await GenerateAndAddSortResults("MergeSort", 5000);
+            await GenerateAndAddSortResults("ParallelMergeSort", 5000);
+
+            await GenerateAndAddSortResults("MergeSort", 50000);
+            await GenerateAndAddSortResults("ParallelMergeSort", 50000);
+
+            await GenerateAndAddSortResults("MergeSort", 500000);
+            await GenerateAndAddSortResults("ParallelMergeSort", 500000);
+
+            await GenerateAndAddSortResults("MergeSort", 5000000);
+            await GenerateAndAddSortResults("ParallelMergeSort", 5000000);
+
+            NotifyObservers(SortResultsList);
+        }
+
+        private async Task GenerateAndAddSortResults(string sortName, int lengthArray)
+        {
             var testStand = new TestStand();
-
-            int lengthArray = 5000;
-
             int[] array = await testStand.GetRandomArrayAsync(lengthArray, 100, 0);
 
             SortResultsList.Add(new SortResults()
             {
-                NameSort = "MergeSort",
-                TicksSorting = await testStand.GetTicksMergeSortAsync(array),
+                NameSort = sortName,
+                TicksSorting = await GetSortingTicksAsync(testStand, sortName, array),
                 LengthArray = lengthArray
             });
+        }
 
-            SortResultsList.Add(new SortResults()
+        private async Task<long> GetSortingTicksAsync(TestStand testStand, string sortName, int[] array)
+        {
+            return sortName switch
             {
-                NameSort = "ParallelMergeSort",
-                TicksSorting = await testStand.GetTicksParallelMergeSortAsync(array),
-                LengthArray = lengthArray
-            });
-
-            lengthArray = 50000;
-
-            array = await testStand.GetRandomArrayAsync(lengthArray, 100, 0);
-
-            SortResultsList.Add(new SortResults()
-            {
-                NameSort = "MergeSort",
-                TicksSorting = await testStand.GetTicksMergeSortAsync(array),
-                LengthArray = lengthArray
-            });
-
-            SortResultsList.Add(new SortResults()
-            {
-                NameSort = "ParallelMergeSort",
-                TicksSorting = await testStand.GetTicksParallelMergeSortAsync(array),
-                LengthArray = lengthArray
-            });
-
-            lengthArray = 500000;
-
-            array = await testStand.GetRandomArrayAsync(lengthArray, 100, 0);
-
-            SortResultsList.Add(new SortResults()
-            {
-                NameSort = "MergeSort",
-                TicksSorting = await testStand.GetTicksMergeSortAsync(array),
-                LengthArray = lengthArray
-            });
-
-            SortResultsList.Add(new SortResults()
-            {
-                NameSort = "ParallelMergeSort",
-                TicksSorting = await testStand.GetTicksParallelMergeSortAsync(array),
-                LengthArray = lengthArray
-            });
-
-            lengthArray = 5000000;
-
-            array = await testStand.GetRandomArrayAsync(lengthArray, 100, 0);
-
-            SortResultsList.Add(new SortResults()
-            {
-                NameSort = "MergeSort",
-                TicksSorting = await testStand.GetTicksMergeSortAsync(array),
-                LengthArray = lengthArray
-            });
-
-            SortResultsList.Add(new SortResults()
-            {
-                NameSort = "ParallelMergeSort",
-                TicksSorting = await testStand.GetTicksParallelMergeSortAsync(array),
-                LengthArray = lengthArray
-            });
-
-            NotifyObservers(SortResultsList);
+                "MergeSort" => await testStand.GetTicksMergeSortAsync(array),
+                "ParallelMergeSort" => await testStand.GetTicksParallelMergeSortAsync(array),
+                _ => throw new ArgumentException("Unsupported sort name"),
+            };
         }
 
         public IDisposable Subscribe(IObserver<List<SortResults>> observer)

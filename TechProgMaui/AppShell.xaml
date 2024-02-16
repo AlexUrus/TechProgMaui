@@ -9,14 +9,17 @@
 
     <TabBar>
         <ShellContent
-            Title="ParallelSort"
-            ContentTemplate="{DataTemplate local:ParallelSortView}"
-            Route="MainPage" />
-
-        <ShellContent
             Title="NewspaperPage"
             ContentTemplate="{DataTemplate local:NewspaperPage}"
-            Route="OtherPage" />
+            Route="MainPage" /> 
+        <ShellContent
+            Title="ParallelSort"
+            ContentTemplate="{DataTemplate local:ParallelSortView}"
+            Route="ParallelSortView" />
+        <ShellContent
+            Title="CancelSort"
+            ContentTemplate="{DataTemplate local:CancelSortPage}"
+            Route="CancelSortPage" />
     </TabBar>
 
 </Shell>

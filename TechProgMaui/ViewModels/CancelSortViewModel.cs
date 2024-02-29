@@ -21,7 +21,19 @@ namespace TechProgMaui.ViewModels
             }
         }
 
-        public NotifyTaskCompletion<int[]> NotifyTaskCompletionSortedMas { get; private set; }
+        private NotifyTaskCompletion<int[]> _notifyTaskCompletionMasToString;
+        public NotifyTaskCompletion<int[]> NotifyTaskCompletionMasToString
+        {
+            get => _notifyTaskCompletionMasToString;
+            private set
+            {
+                if (_notifyTaskCompletionMasToString != value)
+                {
+                    _notifyTaskCompletionMasToString = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
 
         private TestStand _testStand;
 
@@ -30,9 +42,11 @@ namespace TechProgMaui.ViewModels
             _testStand = new TestStand();
             StartSortWithoutBlockCancelWhenAnyConmmand = new Command(async () =>
             {
-                int[] array = await _testStand.GetRandomArrayAsync(100000, 100, 0);
-                //int[] sortedArray = await _testStand.GetSortedMasWithConcurencyAsync(array);
-                NotifyTaskCompletionSortedMas = new NotifyTaskCompletion<int[]>(_testStand.GetSortedMasWithConcurencyAsync(array));
+                int[] array = await _testStand.GetRandomArrayAsync(1000000, 100, 0);
+                int[] sortedMas = await _testStand.GetSortedMasWithConcurencyAsync(array);
+                //NotifyTaskCompletionMasToString = new NotifyTaskCompletion<int[]>(_testStand.GetSortedMasWithConcurencyAsync(array));
+                SortedMas = await GetSortedMasStringAsync(sortedMas);
+
             });
             StartSortWithBlockCancelWhenAnyConmmand = new Command(async () =>
             {
@@ -40,6 +54,11 @@ namespace TechProgMaui.ViewModels
                 int[] sortedArray = _testStand.GetSortedMasWithConcurencyAndBlock(array);
                 SortedMas = string.Join(", ", sortedArray);
             });
+        }
+
+        private async Task<string> GetSortedMasStringAsync(int[] sortedMas)
+        {
+            return await Task.Run(() => string.Join(", ", sortedMas)).ConfigureAwait(false);
         }
     }
 }

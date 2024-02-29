@@ -11,7 +11,7 @@
     <VerticalStackLayout>
         <Button x:Name="StartSortWithoutBlockCancelWhenAny" Text="Start sort without block and cancel when any" Command="{Binding StartSortWithoutBlockCancelWhenAnyConmmand}"/>
         <Button x:Name="StartSortWithBlockCancelWhenAny" Text="Start sort with block and cancel when any" Command="{Binding StartSortWithBlockCancelWhenAnyConmmand}"/>
-        <Label x:Name="SortedMasAsync" Text="{Binding NotifyTaskCompletionSortedMas.Result}"/>
+        <Label x:Name="SortedMasAsync" Text="{Binding NotifyTaskCompletionMasToString.Result}"/>
         <Label x:Name="SortedMas" Text="{Binding SortedMas}"/>
     </VerticalStackLayout>
 </ContentPage>

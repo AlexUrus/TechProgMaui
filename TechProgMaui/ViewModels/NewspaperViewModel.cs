@@ -1,11 +1,12 @@
 ﻿using NewsGenerator;
+using Newtonsoft.Json.Linq;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
 namespace TechProgMaui.ViewModels
 {
-    public class NewspaperViewModel : BaseViewModel, IObserver<List<News>>
+    public class NewspaperViewModel : BaseViewModel, IObserver
     {
         private ObservableCollection<News> _newsList;
         public ObservableCollection<News> NewsList
@@ -33,27 +34,20 @@ namespace TechProgMaui.ViewModels
         {
             SportNewsGenerator = new SportNewsGenerator();
             TechNewsGenerator = new TechNewsGenerator();
-            SportNewsGenerator.Subscribe(this);
-            TechNewsGenerator.Subscribe(this);
+            SportNewsGenerator.AddObserver(this);
+            TechNewsGenerator.AddObserver(this);
             SportNewsGenerator.GenerateNews();
             TechNewsGenerator.GenerateNews();
         }
 
-        public void OnCompleted()
+        public void Update(object obj)
         {
-            throw new NotImplementedException();
-        }
-
-        public void OnError(Exception error)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void OnNext(List<News> value)
-        {
-            foreach (var item in value)
+            if (obj is List<News> list) 
             {
-                NewsList.Add(item);
+                foreach (var item in list)
+                {
+                    NewsList.Add(item);
+                }
             }
         }
     }

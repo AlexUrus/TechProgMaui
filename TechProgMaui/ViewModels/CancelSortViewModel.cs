@@ -21,20 +21,6 @@ namespace TechProgMaui.ViewModels
             }
         }
 
-        private NotifyTaskCompletion<int[]> _notifyTaskCompletionMasToString;
-        public NotifyTaskCompletion<int[]> NotifyTaskCompletionMasToString
-        {
-            get => _notifyTaskCompletionMasToString;
-            private set
-            {
-                if (_notifyTaskCompletionMasToString != value)
-                {
-                    _notifyTaskCompletionMasToString = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-
         private TestStand _testStand;
 
         public CancelSortViewModel()
@@ -58,7 +44,7 @@ namespace TechProgMaui.ViewModels
 
         private async Task<string> GetSortedMasStringAsync(int[] sortedMas)
         {
-            return await Task.Run(() => string.Join(", ", sortedMas)).ConfigureAwait(false);
+            return await Task.Run(() => string.Join(", ", sortedMas));
         }
     }
 }

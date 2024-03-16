@@ -7,10 +7,11 @@ namespace NewsGenerator
         [JsonProperty("title")]
         public string Title { get; set; }
 
-        [JsonProperty("description")]
+        [JsonProperty(propertyName: "description")]
         public string Description { get; set; }
 
         [JsonProperty("publishedAt")]
         public DateTime PublishedAt { get; set; }
+        public virtual string Category { get; protected set; }
     }
 }

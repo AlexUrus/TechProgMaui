@@ -9,6 +9,9 @@ namespace NewsGenerator
 {
     public class SportNews : News
     {
-
+        public SportNews()
+        {
+            
+        }
     }
 }

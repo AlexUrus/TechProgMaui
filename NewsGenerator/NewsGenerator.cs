@@ -7,35 +7,47 @@ using System.Threading.Tasks;
 
 namespace NewsGenerator
 {
-    abstract public class NewsGenerator: IObservable<List<News>>
+    abstract public class NewsGenerator: IObservable
     {
         public List<News> NewsList { get; set; }
-        public abstract void GenerateNews();
 
-        protected List<IObserver<List<News>>> observers;
-        protected virtual string Category { get; } 
+        protected List<IObserver> observers;
+        protected abstract string Category { get; }
+        protected abstract string FileName { get; }
 
         public NewsGenerator()
         {
             NewsList = new List<News>();
-            observers = new List<IObserver<List<News>>>();
+            observers = new List<IObserver>();
         }
 
-        public IDisposable Subscribe(IObserver<List<News>> observer)
+        public async void GenerateNews()
         {
-            if (!observers.Contains(observer))
-                observers.Add(observer);
-            return new Unsubscriber(observers, observer);
-        }
+            string filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, FileName);
 
-        protected void NotifyObservers(List<News> listNews)
-        {
-            foreach (var observer in observers)
+            using (HttpClient httpClient = new HttpClient())
             {
-                observer.OnNext(listNews);
+                try
+                {
+                    HttpResponseMessage response = await httpClient.GetAsync(BuildApiUrl());
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        string newsJson = await response.Content.ReadAsStringAsync();
+                        SaveJsonToFile(newsJson, filePath);
+                        ParseAndNotify(newsJson);
+                    }
+                    else
+                    {
+                        TryLoadFromSavedFile(filePath);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"An error occurred: {ex.Message}");
+                }
             }
         }
-
         protected string BuildApiUrl()
         {
             string apiKey = "e4fc91bf12f84a68bdfd6635855b5b13";
@@ -53,14 +65,22 @@ namespace NewsGenerator
 
             foreach (var item in jToken["articles"])
             {
-                var news = new TechNews
+                if(this is TechNewsGenerator)
                 {
-                    Title = item["title"]?.ToString(),
-                    Description = item["description"]?.ToString(),
-                    PublishedAt = DateTime.Parse(item["publishedAt"]?.ToString())
-                };
-
-                NewsList.Add(news);
+                    var news = new TechNews();
+                    news.Title = Category + " | " + item["title"]?.ToString();
+                    news.Description = item["description"]?.ToString();
+                    news.PublishedAt = DateTime.Parse(item["publishedAt"]?.ToString());
+                    NewsList.Add(news);
+                }
+                else if(this is SportNewsGenerator)
+                {
+                    var news = new SportNews();
+                    news.Title = Category + " | " + item["title"]?.ToString();
+                    news.Description = item["description"]?.ToString();
+                    news.PublishedAt = DateTime.Parse(item["publishedAt"]?.ToString());
+                    NewsList.Add(news);
+                }
             }
 
             NotifyObservers(NewsList);
@@ -79,23 +99,20 @@ namespace NewsGenerator
             }
         }
 
-        private class Unsubscriber : IDisposable
+        public void AddObserver(IObserver o)
         {
-            private List<IObserver<List<News>>> _observers;
-            private IObserver<List<News>> _observer;
+            observers.Add(o);
+        }
 
-            public Unsubscriber(List<IObserver<List<News>>
-                > observers, IObserver<List<News>> observer)
-            {
-                _observers = observers;
-                _observer = observer;
-            }
+        public void RemoveObserver(IObserver o)
+        {
+            observers.Remove(o);
+        }
 
-            public void Dispose()
-            {
-                if (_observer != null && _observers.Contains(_observer))
-                    _observers.Remove(_observer);
-            }
+        public void NotifyObservers(object obj)
+        {
+            foreach (IObserver observer in observers)
+                observer.Update(obj);
         }
     }
 }

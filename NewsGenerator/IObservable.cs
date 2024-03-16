@@ -6,11 +6,10 @@ using System.Threading.Tasks;
 
 namespace NewsGenerator
 {
-    public class TechNews : News
+    public interface IObservable
     {
-        public TechNews()
-        {
-            Category = "Tech";
-        }
+        void AddObserver(IObserver o);
+        void RemoveObserver(IObserver o);
+        void NotifyObservers(object obj);
     }
 }

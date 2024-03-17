@@ -21,34 +21,36 @@ namespace TechProgMaui.ViewModels
                 }
             }
         }
-        public SportNewsGenerator SportNewsGenerator { get; set; }
-        public TechNewsGenerator TechNewsGenerator { get; set; }
+        private ApiNewsGenerator _apiNewsGenerator;
+        private StorageNewsGenerator _storageNewsGenerator;
 
         public NewspaperViewModel()
         {
             NewsList = new ObservableCollection<News>();
-            GenerateNews();
-        }
-
-        public void GenerateNews()
-        {
-            SportNewsGenerator = new SportNewsGenerator();
-            TechNewsGenerator = new TechNewsGenerator();
-            SportNewsGenerator.AddObserver(this);
-            TechNewsGenerator.AddObserver(this);
-            SportNewsGenerator.GenerateNews();
-            TechNewsGenerator.GenerateNews();
+            _apiNewsGenerator = new();
+            GenerateNews(_apiNewsGenerator);
         }
 
         public void Update(object obj)
         {
-            if (obj is List<News> list) 
+            if (obj is List<News> list && list.Count > 0) 
             {
                 foreach (var item in list)
                 {
                     NewsList.Add(item);
                 }
             }
+            else
+            {
+                _storageNewsGenerator = new();
+                GenerateNews(_storageNewsGenerator);
+            }
+        }
+
+        private void GenerateNews<T>(T newsGenerator) where T : NewsGenerator.NewsGenerator
+        { 
+            newsGenerator.AddObserver(this);
+            newsGenerator.GenerateNews();
         }
     }
 }

@@ -6,11 +6,8 @@ using System.Threading.Tasks;
 
 namespace NewsGenerator
 {
-    public class TechNews : News
+    public class StorageNews : News
     {
-        public TechNews()
-        {
-            Category = "Tech";
-        }
+        public override string ViewTitle { get => "News from Storage: " + Title;}
     }
 }

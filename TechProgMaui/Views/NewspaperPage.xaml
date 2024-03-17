@@ -29,7 +29,7 @@
                                 <ViewCell.View>
                                     <Frame BackgroundColor="WhiteSmoke" HasShadow="True" Opacity="0.8" Margin="10">
                                         <StackLayout>
-                                            <Label Text="{Binding Title}" FontAttributes="Bold"/>
+                                            <Label Text="{Binding ViewTitle}" FontAttributes="Bold"/>
                                             <Label Text="{Binding Description}"/>
                                             <Label Text="{Binding PublishedAt}"/>
                                         </StackLayout>
@@ -39,7 +39,6 @@
                         </DataTemplate>
                     </ListView.ItemTemplate>
                 </ListView>
-                <Button Clicked="Button_Clicked"/>
             </VerticalStackLayout>
         </ScrollView>
     </Grid>

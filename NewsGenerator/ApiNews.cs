@@ -7,11 +7,8 @@ using System.Threading.Tasks;
 
 namespace NewsGenerator
 {
-    public class SportNews : News
+    public class ApiNews : News
     {
-        public SportNews()
-        {
-            
-        }
+        public override string ViewTitle { get => "News from Api: " + Title; }
     }
 }

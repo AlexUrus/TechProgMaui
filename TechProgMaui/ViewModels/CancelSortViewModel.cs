@@ -30,7 +30,6 @@ namespace TechProgMaui.ViewModels
             {
                 int[] array = await _testStand.GetRandomArrayAsync(1000000, 100, 0);
                 int[] sortedMas = await _testStand.GetSortedMasWithConcurencyAsync(array);
-                //NotifyTaskCompletionMasToString = new NotifyTaskCompletion<int[]>(_testStand.GetSortedMasWithConcurencyAsync(array));
                 SortedMas = await GetSortedMasStringAsync(sortedMas);
 
             });

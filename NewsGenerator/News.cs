@@ -2,7 +2,7 @@
 
 namespace NewsGenerator
 {
-    abstract public class News
+    public abstract class News
     {
         [JsonProperty("title")]
         public string Title { get; set; }
@@ -12,6 +12,8 @@ namespace NewsGenerator
 
         [JsonProperty("publishedAt")]
         public DateTime PublishedAt { get; set; }
-        public virtual string Category { get; protected set; }
+
+        [JsonIgnore]
+        public virtual string ViewTitle { get;}
     }
 }

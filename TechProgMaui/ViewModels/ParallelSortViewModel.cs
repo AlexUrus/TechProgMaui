@@ -22,6 +22,7 @@ namespace TechProgMaui.ViewModels
         {
             await GenerateAndAddSortResults("MergeSort", 5000);
             await GenerateAndAddSortResults("ParallelMergeSort", 5000);
+            await GenerateAndAddSortResults("WrongParallelMergeSort", 5000);
 
             await GenerateAndAddSortResults("MergeSort", 50000);
             await GenerateAndAddSortResults("ParallelMergeSort", 50000);
@@ -44,7 +45,8 @@ namespace TechProgMaui.ViewModels
             {
                 NameSort = sortName,
                 TicksSorting = await GetSortingTicksAsync(testStand, sortName, array),
-                LengthArray = lengthArray
+                LengthArray = lengthArray,
+                IsCorrectSorted = array.Length == lengthArray
             });
         }
 
@@ -54,6 +56,7 @@ namespace TechProgMaui.ViewModels
             {
                 "MergeSort" => await testStand.GetTicksMergeSortAsync(array),
                 "ParallelMergeSort" => await testStand.GetTicksParallelMergeSortAsync(array),
+                "WrongParallelMergeSort" => await testStand.GetTicksWrongParallelMergeSortAsync(array),
                 _ => throw new ArgumentException("Unsupported sort name"),
             };
         }
@@ -98,12 +101,14 @@ namespace TechProgMaui.ViewModels
         public string NameSort { get; set; }
         public long TicksSorting { get; set; }
         public int LengthArray { get; set; }
+        public bool IsCorrectSorted { get; set; }
 
-        public SortResults(string nameSort, long ticksSorting, int lenghtArray)
+        public SortResults(string nameSort, long ticksSorting, int lenghtArray, bool isCorrectSorted)
         {
             NameSort = nameSort;
             TicksSorting = ticksSorting;
             LengthArray = lenghtArray;
+            IsCorrectSorted = isCorrectSorted;
         }
     }
 

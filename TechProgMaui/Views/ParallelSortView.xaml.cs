@@ -36,7 +36,7 @@ public partial class ParallelSortView : ContentPage, IObserver<List<SortResults>
 			CharEntries.Add(new ChartEntry(item.TicksSorting)
 			{
 				Color = SKColor.Parse("#FF1493"),
-				Label = item.NameSort + " " + item.LengthArray,
+				Label = item.NameSort + " " + item.LengthArray + " Correct = " + item.IsCorrectSorted,
 				ValueLabel = $"{item.TicksSorting}"
 			});
 		}

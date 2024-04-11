@@ -33,6 +33,8 @@ namespace ParallelSortLib
             {
                 for (int j = i + 1; j < mas.Length; j++)
                 {
+                    cancellationToken.ThrowIfCancellationRequested();
+
                     if (mas[i] > mas[j])
                     {
                         temp = mas[i];

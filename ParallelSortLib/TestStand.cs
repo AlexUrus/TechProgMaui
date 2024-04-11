@@ -69,9 +69,9 @@ namespace ParallelSorting
         {
             var cts = new CancellationTokenSource();
 
-            Task<int[]> task1 = Task.Run(() => BubbleSort.Sort(array.Clone() as int[]));
-            Task<int[]> task2 = Task.Run(() => MergeSort.Sort(array.Clone() as int[]));
-            Task<int[]> task3 = Task.Run(() => QuickSort.Sort(array.Clone() as int[]));
+            Task<int[]> task1 = Task.Run(() => BubbleSort.Sort(array.Clone() as int[]), cts.Token);
+            Task<int[]> task2 = Task.Run(() => MergeSort.Sort(array.Clone() as int[]), cts.Token);
+            Task<int[]> task3 = Task.Run(() => QuickSort.Sort(array.Clone() as int[]), cts.Token);
 
             Task<int[]> completedTask = await Task.WhenAny(task1, task2, task3);
 

@@ -50,5 +50,42 @@ namespace ParallelSortLib
         {
             return Sort(array, 0, array.Length - 1);
         }
+
+        public static int[] Sort(int[] array, CancellationToken cancellationToken)
+        {
+            return Sort(array, 0, array.Length - 1, cancellationToken);
+        }
+
+        static int[] Sort(int[] array, int minIndex, int maxIndex, CancellationToken cancellationToken)
+        {
+            if (minIndex >= maxIndex)
+            {
+                return array;
+            }
+
+            var pivotIndex = Partition(array, minIndex, maxIndex, cancellationToken);
+            Sort(array, minIndex, pivotIndex - 1, cancellationToken);
+            Sort(array, pivotIndex + 1, maxIndex, cancellationToken);
+
+            return array;
+        }
+
+        static int Partition(int[] array, int minIndex, int maxIndex, CancellationToken cancellationToken)
+        {
+            var pivot = minIndex - 1;
+            for (var i = minIndex; i < maxIndex; i++)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                if (array[i] < array[maxIndex])
+                {
+                    pivot++;
+                    Swap(ref array[pivot], ref array[i]);
+                }
+            }
+
+            pivot++;
+            Swap(ref array[pivot], ref array[maxIndex]);
+            return pivot;
+        }
     }
 }

@@ -41,16 +41,32 @@ namespace TechProgMaui.ViewModels
             var testStand = new TestStand();
             int[] array = await testStand.GetRandomArrayAsync(lengthArray, 100, 0);
 
+            var arrayTicks = await GetSortingTicksAsync(testStand, sortName, array);
+
+            int[] sortedArray = arrayTicks.SortedArray;
+            long tickSorting = arrayTicks.TicksSort;
             SortResultsList.Add(new SortResults()
             {
                 NameSort = sortName,
-                TicksSorting = await GetSortingTicksAsync(testStand, sortName, array),
+                TicksSorting = tickSorting,
                 LengthArray = lengthArray,
-                IsCorrectSorted = array.Length == lengthArray
+                IsCorrectSorted = await IsCorrectSort(sortedArray)
             });
         }
 
-        private async Task<long> GetSortingTicksAsync(TestStand testStand, string sortName, int[] array)
+        private async Task<bool> IsCorrectSort(int[] array)
+        {
+            for (int i = 0; i < array.Length - 1; i++)
+            {
+                if (array[i] > array[i + 1])
+                {
+                    return false;
+                }
+            }
+            return true;
+        } 
+
+        private async Task<ArrayTicks> GetSortingTicksAsync(TestStand testStand, string sortName, int[] array)
         {
             return sortName switch
             {

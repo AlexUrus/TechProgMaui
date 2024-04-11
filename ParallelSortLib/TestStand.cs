@@ -8,6 +8,18 @@ using System.Threading.Tasks;
 
 namespace ParallelSorting
 {
+    public struct ArrayTicks
+    {
+        public int[] SortedArray;
+        public long TicksSort;
+
+        public ArrayTicks(int[] sortedArray, long ticksSort)
+        {
+            SortedArray = sortedArray;
+            TicksSort = ticksSort;
+        }
+    }
+
     public class TestStand
     {
         public async Task<int[]> GetRandomArrayAsync(int length, int maxValue, int minValue)
@@ -20,36 +32,36 @@ namespace ParallelSorting
             return ArrayGenerator.Generate(length, maxValue, minValue);
         }
 
-        public async Task<long> GetTicksMergeSortAsync(int[] array)
+        public async Task<ArrayTicks> GetTicksMergeSortAsync(int[] array)
         {
             return await Task.Run(() =>
             {
                 Stopwatch sw = Stopwatch.StartNew();
-                MergeSort.Sort(array);
+                int[] sortedArray = MergeSort.Sort(array);
                 sw.Stop();
-                return sw.ElapsedTicks;
+                return new ArrayTicks(sortedArray, sw.ElapsedTicks);
             });
         }
 
-        public async Task<long> GetTicksParallelMergeSortAsync(int[] array)
+        public async Task<ArrayTicks> GetTicksParallelMergeSortAsync(int[] array)
         {
             return await Task.Run(() =>
             {
                 Stopwatch sw = Stopwatch.StartNew();
-                ParallelMergeSort.ParallelSort(array);
+                int[] sortedArray = ParallelMergeSort.ParallelSort(array);
                 sw.Stop();
-                return sw.ElapsedTicks;
+                return new ArrayTicks(sortedArray, sw.ElapsedTicks);
             });
         }
 
-        public async Task<long> GetTicksWrongParallelMergeSortAsync(int[] array)
+        public async Task<ArrayTicks> GetTicksWrongParallelMergeSortAsync(int[] array)
         {
             return await Task.Run(() =>
             {
                 Stopwatch sw = Stopwatch.StartNew();
-                WrongParallelMergeSort.Sort(array);
+                int[] sortedArray = WrongParallelMergeSort.Sort(array);
                 sw.Stop();
-                return sw.ElapsedTicks;
+                return new ArrayTicks(sortedArray, sw.ElapsedTicks);
             });
         }
 

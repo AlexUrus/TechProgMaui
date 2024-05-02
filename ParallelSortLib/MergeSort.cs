@@ -127,5 +127,24 @@ namespace ParallelSorting
                 array[lowIndex + i] = tempArray[i];
             }
         }
+
+        public static int[] SortWithEx(int[] array, int lowIndex, int highIndex)
+        {
+            if (lowIndex < highIndex)
+            {
+                var middleIndex = (lowIndex + highIndex) / 2;
+                Sort(array, lowIndex, middleIndex);
+                Sort(array, middleIndex + 1, highIndex);
+                Merge(array, lowIndex, middleIndex, highIndex);
+                throw new Exception("Ex MergeSort");
+            }
+
+            return array;
+        }
+
+        public static int[] SortWithEx(int[] array)
+        {
+            return SortWithEx(array, 0, array.Length - 1);
+        }
     }
 }

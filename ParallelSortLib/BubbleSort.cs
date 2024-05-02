@@ -59,7 +59,7 @@ namespace ParallelSortLib
                         temp = mas[i];
                         mas[i] = mas[j];
                         mas[j] = temp;
-                        throw new Exception();
+                        throw new Exception("Ex BubbleSort");
                     }
                 }
             }

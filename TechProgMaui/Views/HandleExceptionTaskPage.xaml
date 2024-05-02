@@ -9,7 +9,9 @@
     </ContentPage.BindingContext>
 
     <VerticalStackLayout>
-        <Button x:Name="StartSortWithoutBlockCancelWhenAny" Text="Start one sort with exception" Command="{Binding StartOneSortWithException}"/>
+        <Button x:Name="StartOneSortWithExBtn" Text="Start one sort with exception" Command="{Binding StartOneSortWithEx}"/>
+        <Button x:Name="StartTwoSortWithExBtn" Text="Start two sort with exception" Command="{Binding StartTwoSortWithEx}"/>
+        <Button x:Name="StartThreeSortWithExBtn" Text="Start three sort with exception" Command="{Binding StartThreeSortWithEx}"/>
         <Label x:Name="SortedMas" Text="{Binding SortedMas}"/>
     </VerticalStackLayout>
 </ContentPage>

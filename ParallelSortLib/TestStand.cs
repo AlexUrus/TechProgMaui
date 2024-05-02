@@ -102,12 +102,50 @@ namespace ParallelSorting
             return completedTask.Result;
         }
 
-        public async Task<int[]> SortMasAsyncWithException(int[] array)
+        public async Task<int[]> BubbleSortMasAsyncWithException(int[] array)
         {
             return await Task.Run(() =>
             {
-                return BubbleSort.SortWithException(array);   
+                try
+                {
+                    return BubbleSort.SortWithException(array);
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception(ex.Message);
+                }
             });
+        }
+
+        public async Task<int[]> MergeSortMasAsyncWithException(int[] array)
+        {
+            return await Task.Run(() =>
+            {
+                try
+                {
+                    return MergeSort.SortWithEx(array);
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception(ex.Message); 
+                }
+            });
+        }
+
+        public async Task<int[]> MergeSortMasAsync(int[] array)
+        {
+            return await Task.Run(() =>
+            {
+                return MergeSort.Sort(array);
+            });
+        }
+
+        public async Task<int[]> QuickSortMasAsyncCanceled(int[] array, CancellationToken token)
+        {
+            return await Task.Run(() =>
+            {
+                return QuickSort.Sort(array, token);
+            },token);
         }
     }
 }

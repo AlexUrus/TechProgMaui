@@ -68,7 +68,7 @@ namespace ParallelSorting
 
         public static int[] Sort(int[] array, CancellationToken cancellationToken)
         {
-            return Sort(array, 0, array.Length - 1);
+            return Sort(array, 0, array.Length - 1, cancellationToken);
         }
 
         public static int[] Sort(int[] array, int lowIndex, int highIndex, CancellationToken cancellationToken)
@@ -93,7 +93,9 @@ namespace ParallelSorting
 
             while ((left <= middleIndex) && (right <= highIndex))
             {
-                cancellationToken.ThrowIfCancellationRequested();
+                if (cancellationToken.IsCancellationRequested)
+                    cancellationToken.ThrowIfCancellationRequested();
+
                 if (array[left] < array[right])
                 {
                     tempArray[index] = array[left];

@@ -75,7 +75,8 @@ namespace ParallelSortLib
             var pivot = minIndex - 1;
             for (var i = minIndex; i < maxIndex; i++)
             {
-                cancellationToken.ThrowIfCancellationRequested();
+                if(cancellationToken.IsCancellationRequested)
+                    cancellationToken.ThrowIfCancellationRequested();
                 if (array[i] < array[maxIndex])
                 {
                     pivot++;

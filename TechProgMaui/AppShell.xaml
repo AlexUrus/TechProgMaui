@@ -20,6 +20,10 @@
             Title="CancelSort"
             ContentTemplate="{DataTemplate local:CancelSortPage}"
             Route="CancelSortPage" />
+        <ShellContent
+            Title="HandleExceptionTask"
+            ContentTemplate="{DataTemplate local:HandleExceptionTaskPage}"
+            Route="HandleExceptionTaskPage" />
     </TabBar>
 
 </Shell>

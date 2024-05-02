@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace ParallelSorting
 {
@@ -69,15 +70,17 @@ namespace ParallelSorting
         {
             var cts = new CancellationTokenSource();
 
-            Task<int[]> task1 = Task.Run(() => BubbleSort.Sort(array.Clone() as int[]), cts.Token);
-            Task<int[]> task2 = Task.Run(() => MergeSort.Sort(array.Clone() as int[]), cts.Token);
-            Task<int[]> task3 = Task.Run(() => QuickSort.Sort(array.Clone() as int[]), cts.Token);
+            Task<int[]> task1 = Task.Run(() => BubbleSort.Sort(array.Clone() as int[], cts.Token), cts.Token);
+            Task<int[]> task2 = Task.Run(() => MergeSort.Sort(array.Clone() as int[], cts.Token), cts.Token);
+            Task<int[]> task3 = Task.Run(() => QuickSort.Sort(array.Clone() as int[], cts.Token),cts.Token);
 
             Task<int[]> completedTask = await Task.WhenAny(task1, task2, task3);
 
             if (completedTask != task1) cts.Cancel();
             if (completedTask != task2) cts.Cancel();
             if (completedTask != task3) cts.Cancel();
+
+            await Task.Delay(2000);
 
             return completedTask.Result;
         }
@@ -99,6 +102,12 @@ namespace ParallelSorting
             return completedTask.Result;
         }
 
-
+        public async Task<int[]> SortMasAsyncWithException(int[] array)
+        {
+            return await Task.Run(() =>
+            {
+                return BubbleSort.SortWithException(array);   
+            });
+        }
     }
 }

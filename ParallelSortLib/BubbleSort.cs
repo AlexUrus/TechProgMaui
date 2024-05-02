@@ -33,13 +33,33 @@ namespace ParallelSortLib
             {
                 for (int j = i + 1; j < mas.Length; j++)
                 {
-                    cancellationToken.ThrowIfCancellationRequested();
+                    if (cancellationToken.IsCancellationRequested)
+                        cancellationToken.ThrowIfCancellationRequested();
 
                     if (mas[i] > mas[j])
                     {
                         temp = mas[i];
                         mas[i] = mas[j];
                         mas[j] = temp;
+                    }
+                }
+            }
+            return mas;
+        }
+
+        public static int[] SortWithException(int[] mas)
+        {
+            int temp;
+            for (int i = 0; i < mas.Length; i++)
+            {
+                for (int j = i + 1; j < mas.Length; j++)
+                { 
+                    if (mas[i] > mas[j])
+                    {
+                        temp = mas[i];
+                        mas[i] = mas[j];
+                        mas[j] = temp;
+                        throw new Exception();
                     }
                 }
             }
